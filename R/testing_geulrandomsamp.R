@@ -1,3 +1,5 @@
+library(foreach)
+set.seed(123123)
 # An empty matrix is made to store all the 100 random realizations of each point in the geul data
 samplemaps <- matrix(NA, nrow=length(geul.krig$var1.pred), ncol=5)
 
@@ -36,21 +38,13 @@ return(solution)
 SRS <- calcMeanSpatialSRS(10, geul.krig$var1.pred, geul.krig$var1.var, 0.120, 0.250)
 
 # The mean is added to the geul dataset in order to plot it
-geul.krig$meanSRS <- as.numeric(SRS)
+geul.krig$meanSRS <- as.numeric(solution)
 
 # and the mean is plotted by spplot
-spplot(geul.krig, zcol=c(3,4))
+spplot(geul.krig, zcol="meanSRS")
 
 spplot(geul.krig)
 
 
 ##################Rommel#################
-m <- 0.12     # mean of the untransformed data
-s <- 0.250    # standard deviation of the untransformed data
-scale <- sqrt(log(s**2/m**2 + 1))
-locat <- log(m) -0.5 * scale^2
-set.seed(2373)
-sc <- rlnorm(10000, locat, scale)
-mean(sc)
-sd(sc)
-hist(sc, breaks = "Freedman-Diaconis", xlim=c(0, 2))
+
