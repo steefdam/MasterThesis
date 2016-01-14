@@ -1,32 +1,14 @@
 # Stefan van Dam
 # 6 January 2016
 
-stratsamp <- function(mu, sigma, n, p) {
-  # Note that here p is a vector of probs
-  # n is sample size per stratum
-  # mu and sigma are parameters of normal distribution to be sampled
-  # function returns matrix with n rows and length(p)-1 columns
-  if (is.na(mu) || (is.na(sigma))) {
-    outmat <- matrix(NA, n, length(p)-1)
-  } else {
-    lims <- qnorm(p, mu, sigma)
-    outmat <- matrix(NA, n, length(p)-1)
-    counts <- rep(0, length(lims)-1)
-    while(any(counts < n)){
-      r <- rnorm(1, mu, sigma)
-      intvl <- findInterval(r,lims)
-      if(counts[intvl] < n){
-        counts[intvl] <- counts[intvl] + 1
-        outmat[counts[intvl], intvl] <- r
-      }
-    }
-  }
-  return(outmat)
-}
+# Load functions
+source("R/stratsamp.R")
+source("R/transformLog.R")
 
+# load libraries
 library(foreach)
 
-calcMeanSpatialSTRS <- function(n, SpatialMeans, SpatialVariances, nsmean, nssigma) {
+calcMeanSpatialSTRS <- function(n, SpatialMeans, SpatialVariances, nsmean, nssigma, p) {
   x <- foreach(a=SpatialMeans, b=SpatialVariances) %do% {
     stratsamp(a, b, n/5, 0:5/5)
   }
@@ -41,8 +23,12 @@ calcMeanSpatialSTRS <- function(n, SpatialMeans, SpatialVariances, nsmean, nssig
     STRSsamplemaps[i, ] <- y[i][[1]]
     i = i + 1
   }
+  m <- nsmean
+  s <- nssigma
+  scale <- sqrt(log(s**2/m**2 + 1))
+  locat <- log(m) -0.5 * scale^2
+  soil_conssamps <- stratsamp(n, locat, scale)
   
-  soil_conssamps <- rlnorm(n, nsmean, nssigma)
   
   spb <- matrix(NA, ncol=n*n, nrow=length(SpatialMeans))
   
