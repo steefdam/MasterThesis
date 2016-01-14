@@ -1,19 +1,22 @@
 # Stefan van Dam
 # 6 January 2016
 
-# In this script, the geuldata is assumed available.
+# For this script, it is assumed that R/geul_data.R has been run. That loads all necessary data.
 # This geul dataset is the output of the krige function, which contains means and variances.
-# Of each point in the dataset, 100 samples are randomly generated.
-# These 100 samples of each point are put into a matrix,
+# Of each point in the dataset, n samples are randomly generated.
+# These n samples of each point are put into a matrix,
 # which has n columns and just as many rows as the dataset has points.
+# Then the mean is calculated of all the samples and put into a list. 
+# This list is added to the guel data set and plotted.
 
-randomsamp <- function(mu, sigma, n) {
-  samples <- rnorm(n, mu, sigma)
-  return(samples)
-}
+# Load necessary functions
+source("R/randomsamp.R")
 
+# Load libraries
 library(foreach)
+
 set.seed(123123)
+
 calcMeanSpatialSRS <- function(n, SpatialMeans, SpatialVariances, nsmean, nssigma) {
   # An empty matrix is made to store all the 100 random realizations of each point in the geul data
   samplemaps <- matrix(NA, nrow=length(SpatialMeans), ncol=n)
@@ -55,12 +58,12 @@ calcMeanSpatialSRS <- function(n, SpatialMeans, SpatialVariances, nsmean, nssigm
 SRS <- calcMeanSpatialSRS(5, geul.krig$var1.pred, geul.krig$var1.var, 0.120, 0.250)
 
 # The mean is added to the geul dataset in order to plot it
-geul.krig$meanSRS3 <- as.numeric(SRS)
+geul.krig$meanSRS <- as.numeric(SRS)
 
 # and then the mean is plotted by spplot
-spplot(geul.krig, zcol=c(5))
+spplot(geul.krig, zcol="meanSRS")
 
 spplot(geul.krig)
 
-# geul.krig$var1.var <- sqrt(geul.krig$var1.var)
+
 
