@@ -11,9 +11,18 @@ for (i in 1:length(geul.krig$var1.pred)) {
 }
 
 log <- transformLog(0.120,0.250)
-soil_conssamps <- stratsamp(log[2], log[1], 20, 0:5/5)
+soil_conssamps <- stratsamp(log[2], log[1], 10, 0:5/5)
 
 spb <- matrix(NA, ncol=50, nrow=length(geul.krig$var1.pred))
+
+for (j in 1:n) {
+  # deel n door q
+  12*910
+  34*23
+}
+
+i <- 1
+j <- n/q/q
 
 i <- 1
 j <- 1
