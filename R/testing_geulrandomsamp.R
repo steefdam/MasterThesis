@@ -12,6 +12,11 @@ for (i in 1:5) {
   samplemaps[, i] <- as.numeric(x)
 }
 
+  samplemaps2 <- foreach(a=geul.krig$var1.pred, b=geul.krig$var1.var, .combine=rbind) %do% {
+    randomsamp(a, b, 10)
+  }
+
+
 # Then we also sample from the other input, which is the soil consumption.
 # This is in log, so we have to transform it.
 m <- 0.12
