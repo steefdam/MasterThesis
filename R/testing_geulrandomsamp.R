@@ -1,38 +1,49 @@
 library(foreach)
 set.seed(123123)
-# An empty matrix is made to store all the 100 random realizations of each point in the geul data
-samplemaps <- matrix(NA, nrow=length(geul.krig$var1.pred), ncol=5)
 
 # Here the 100 realizations are made of each point in the geuldata and stored in the samplemaps.
 # The 100 realizations are stored in samplemaps
-for (i in 1:5) {
-  x <- foreach(a=geul.krig$var1.pred, b=geul.krig$var1.var) %do% {
-    randomsamp(a, b, 1)
-  }
-  samplemaps[, i] <- as.numeric(x)
+
+geul.krig$var1.var <- sqrt(geul.krig$var1.var)
+
+n <- 100
+
+samplemaps <- foreach(a=geul.krig$var1.pred, b=geul.krig$var1.var, .combine=rbind) %do% {
+  randomsamp(a, b, n)
 }
 
-  samplemaps2 <- foreach(a=geul.krig$var1.pred, b=geul.krig$var1.var, .combine=rbind) %do% {
-    randomsamp(a, b, 10)
-  }
+soil_conssamps <- rlnorm(n, locat, scale)
+
+spb <- matrix(NA, ncol=n, nrow=length(geul.krig$var1.pred))
+
+for (j in 1:n) {
+  spb[,j] <- soil_conssamps[j] * samplemaps[,j]
+}
+
+solution <- apply(spb, 1, mean)
+
+geul.krig$meanSRS <- as.numeric(solution)
+
+spplot(geul.krig, zcol="meanSRS")
+
 
 
 # Then we also sample from the other input, which is the soil consumption.
-# This is in log, so we have to transform it.
+# This is in log, so we have to transform it first.
 m <- 0.12
 s <- 0.250
 scale <- sqrt(log(s**2/m**2 + 1))
 locat <- log(m) -0.5 * scale^2
-soil_conssamps <- rlnorm(5, locat, scale)
+soil_conssamps <- rlnorm(n, locat, scale)
 
 # Then we create a matrix, where the output is stored of the model, in this case I = S * Pb
 # S are the samples drawn put in soil_conssamps
 # Pb are the samplemaps
 # so spb contains the output of S * Pb
 # the first S will be multiplied by the first Pb, so the number of rows spb must have is n
-spb <- matrix(NA, ncol=5, nrow=length(geul.krig$var1.pred))
+spb <- matrix(NA, ncol=n, nrow=length(geul.krig$var1.pred))
 
-for (j in 1:5) {
+for (j in 1:n) {
   spb[,j] <- soil_conssamps[j] * samplemaps[,j]
 }
 
@@ -47,6 +58,8 @@ geul.krig$meanSRS <- as.numeric(solution)
 
 # and the mean is plotted by spplot
 spplot(geul.krig, zcol="meanSRS")
+
+spplot(geul.krig, zcol=c(1,3))
 
 spplot(geul.krig)
 
