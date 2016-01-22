@@ -33,7 +33,7 @@ calcMeanSpatialSRS <- function(n, SpatialMeans, SpatialVariances, nsmean, nssigm
   
   # Then we also sample from the other input, which is the soil consumption.
   # This is in log, so we have to transform it.
-  log <- transformLog(0.120,0.250)
+  log <- transformLog(0.120, 0.250)
   soil_conssamps <- rlnorm(10, log[2], log[1])
   
   # Then we create a matrix, where the output is stored of the model, in this case I = S * Pb

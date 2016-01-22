@@ -6,13 +6,14 @@ set.seed(123123)
 
 geul.krig$var1.var <- sqrt(geul.krig$var1.var)
 
-n <- 100
+n <- 10
 
-samplemaps <- foreach(a=geul.krig$var1.pred, b=geul.krig$var1.var, .combine=rbind) %do% {
+samplemaps <- foreach(a = geul.krig$var1.pred, b = geul.krig$var1.var, .combine = rbind) %do% {
   randomsamp(a, b, n)
 }
 
-soil_conssamps <- rlnorm(n, locat, scale)
+log <- transformLog(0.120, 0.250)
+soil_conssamps <- rlnorm(n, log[2], log[1])
 
 spb <- matrix(NA, ncol=n, nrow=length(geul.krig$var1.pred))
 
