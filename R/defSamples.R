@@ -28,19 +28,10 @@ defSamples <- function(n, object, samplemethod = "random", q = 0) {
   return(x)
 }
 
-mySamplesNorm <- defSamples(n = 10, object = mynorm)
-
-mySamplesLog <- defSamples(n = 10, object = mylog)
-
-mySamplesBeta <- defSamples(n = 10, object = mybeta)
-
-myNS  <- defSamples(n = 10, object = geul.krig)
-
-
-mcAnalysis <- myNS * mySamplesLog
-
-solution <- apply(mcAnalysis, 1, mean)
-
-geul.krig$meanSRS <- as.numeric(solution)
-
-spplot(geul.krig, zcol="meanSRS")
+# mySamplesNorm <- defSamples(n = 10, object = mynorm)
+# 
+# mySamplesLog <- defSamples(n = 10, object = mylog)
+# 
+# mySamplesBeta <- defSamples(n = 10, object = mybeta)
+# 
+# myNS  <- defSamples(n = 10, object = geul.krig)
