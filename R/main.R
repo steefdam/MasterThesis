@@ -38,7 +38,7 @@ myLog <- defnummarnonspatial(uncertain = TRUE, dist = "log", par = c(logparams[1
 
 # RANDOM SAMPLING
 # Draw samples from each input, choose n and sample method
-n <- 5
+n <- 50
 mySamplesLog <- defSamples(n = n, object = myLog, samplemethod = "random")
 
 myNS <- defSamples(n = n, object = geul.krig, samplemethod = "random")
@@ -65,7 +65,7 @@ spplot(geul.krig, zcol="meanSRSrandom")
 
 # STRATIFIED SAMPLING
 # Draw samples from each input, choose n and sample method
-n <- 5
+n <- 50
 mySamplesLogStrat <- defSamples(n = n, object = myLog, samplemethod = "strat", p = 0:5/5)
 
 myNSStrat <- defSamples(n = n, object = geul.krig, samplemethod = "strat", p = 0:5/5)
