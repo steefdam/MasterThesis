@@ -21,6 +21,4 @@ sampleReshuffle <- function(sample_matrix) {
   return(new_matrix)
 }
 
-t1 <- array(1:500, dim=c(50,10))
 
-sampleReshuffle(t1)
