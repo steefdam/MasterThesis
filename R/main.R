@@ -36,11 +36,40 @@ logparams <- transformLog(0.120,0.250)
 myLog <- defnummarnonspatial(uncertain = TRUE, dist = "log", par = c(logparams[2], logparams[1]))
 
 
-# Draw samples from each input, choose n
-n <- 1000
-mySamplesLog <- defSamples(n = n, object = myLog)
+# RANDOM SAMPLING
+# Draw samples from each input, choose n and sample method
+n <- 5000
+mySamplesLog <- defSamples(n = n, object = myLog, samplemethod = "random")
 
-myNS  <- defSamples(n = n, object = geul.krig)
+myNS <- defSamples(n = n, object = geul.krig, samplemethod = "random")
+
+
+#PERFORM THE MC ANALYSIS
+# create empty matrix with n columns and length of sp object rows
+mcAnalysis <- matrix(NA, ncol=n, nrow=length(geul.krig$var1.pred))
+
+# Do the analysis
+for (j in 1:n) {
+  mcAnalysis[,j] <- mySamplesLog[j] * myNS[,j]
+}
+
+# Retrieve the mean from the analysis
+solution <- apply(mcAnalysis, 1, mean)
+
+# Put the mean into the spatial object
+geul.krig$meanSRS <- as.numeric(solution)
+
+# Plot the object
+spplot(geul.krig, zcol="meanSRS")
+
+
+# STRATIFIED SAMPLING
+# Draw samples from each input, choose n and sample method
+source("R/defSamples.R")
+n <- 5
+mySamplesLogStrat <- defSamples(n = n, object = myLog, samplemethod = "strat", p = 0:5/5)
+
+myNSStrat <- defSamples(n = n, object = geul.krig, samplemethod = "strat", p = 0:5/5)
 
 
 #PERFORM THE MC ANALYSIS
