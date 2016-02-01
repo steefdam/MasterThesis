@@ -57,10 +57,10 @@ for (j in 1:n) {
 solutionRandom <- apply(mcAnalysisRandom, 1, mean)
 
 # Put the mean into the spatial object
-geul.krig$meanSRSrandom <- as.numeric(solutionRandom)
+geul.krig$meanSRS <- as.numeric(solutionRandom)
 
 # Plot the object
-spplot(geul.krig, zcol="meanSRSrandom")
+spplot(geul.krig, zcol="meanSRS")
 
 
 # STRATIFIED SAMPLING
@@ -84,10 +84,10 @@ for (j in 1:n) {
 solutionStrat <- apply(mcAnalysisStrat, 1, mean)
 
 # Put the mean into the spatial object
-geul.krig$meanSRSStrat <- as.numeric(solutionStrat)
+geul.krig$meanSTRS <- as.numeric(solutionStrat)
 
 # Plot the object
-spplot(geul.krig, zcol="meanSRSStrat")
+spplot(geul.krig, zcol="meanSTRS")
 
 
 # Plot both
