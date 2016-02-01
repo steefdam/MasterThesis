@@ -30,20 +30,20 @@ defSamples <- function(n, object, samplemethod = "random", p = 0) {
   
   if (samplemethod == "strat") {
     if (class(object) == "SpatialGridDataFrame") {
-      x <- foreach(a = object[[1]], b = sqrt(object[[2]]), .combine = rbind) %do% {
-        as.numeric(stratsampSpatial(a, b, n/n, p))
+      samples <- foreach(a = object[[1]], b = sqrt(object[[2]]), .combine = rbind) %do% {
+        as.numeric(stratsampSpatial(a, b, n/(length(p)-1), p))
       }
-
-      samples <- matrix(NA, nrow=length(object[[1]]), ncol=n)
-      
-      for (i in 1:length(object[[1]])) {
-        samples[i, ] <- x[i][[1]]
-      }
+#       Why did I wrote this???
+#       samples <- matrix(NA, nrow=length(object[[1]]), ncol=n)
+#       
+#       for (i in 1:length(object[[1]])) {
+#         samples[i, ] <- x[i][[1]]
+#       }
     }
     
     if (class(object) == "nummarnonspatial") {
-      samples <- stratsamp(object, n, p)
-      samples <- sampleReshuffle(samples)
+      samples <- stratsamp(object, n/(length(p)-1), p)
+      #samples <- sampleReshuffle(samples)
     }
   }
   return(samples)

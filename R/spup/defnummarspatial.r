@@ -26,14 +26,14 @@ defnummarspatial <- function(uncertain, SpatialObject, mask, semivar, beta = NA)
 
   # x and y are needed to realize the class. But: is this elegant in R?
   x <- class(SpatialObject)[1]
-  y <- class(semivar)
+  y <- class(semivar)[1]
 
   # set class
   setClass("nummarspatial",
            slots = list(uncertain = "logical",
                         SpatialObject = x,
                         mask = "SpatialGridDataFrame",
-                        semivar = class(semivar)))
+                        semivar = y))
 
   # create new object of class nummarspatial
   um <- new("nummarspatial", uncertain = uncertain, SpatialObject = SpatialObject, mask = mask, semivar = semivar)
@@ -43,5 +43,7 @@ defnummarspatial <- function(uncertain, SpatialObject, mask, semivar, beta = NA)
 
 # Example
 a <- defnummarspatial(uncertain = TRUE, SpatialObject = geul, mask = mask, semivar = vgmpb)
-a
+# a
+class(geul)
 
+# class(vgmpb)[1]

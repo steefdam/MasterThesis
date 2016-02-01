@@ -46,7 +46,7 @@ stratsampSpatial <- function(mu, sigma, n, p) {
     outmat <- matrix(NA, n, length(p)-1)
   } else {
     lims <- qnorm(p, mu, sigma)
-    outmat <- matrix(NA, n, length(p)-1)
+    outmat <- matrix(data = NA, nrow = n, ncol = length(p)-1)
     counts <- rep(0, length(lims)-1)
     while(any(counts < n)){
       r <- rnorm(1, mu, sigma)
