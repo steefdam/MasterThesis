@@ -31,14 +31,14 @@ geul.krig <- krige(pb~1, geul, newdata = mask, vgmpb2)
 spplot(geul.krig, zcol="var1.pred")
 
 
-# Transform log parameters an then create an object of class nummarnonspatial
+# Transform log parameters and then create an object of class nummarnonspatial
 logparams <- transformLog(0.120,0.250)
-myLog <- defnummarnonspatial(uncertain = TRUE, dist = "log", par = c(logparams[2], logparams[1]))
+myLog <- defnummarnonspatial(uncertain = TRUE, dist = "log", par = c(logparams[1], logparams[2]))
 
 
 # RANDOM SAMPLING
 # Draw samples from each input, choose n and sample method
-n <- 5000
+n <- 5
 mySamplesLog <- defSamples(n = n, object = myLog, samplemethod = "random")
 
 myNS <- defSamples(n = n, object = geul.krig, samplemethod = "random")
@@ -46,26 +46,25 @@ myNS <- defSamples(n = n, object = geul.krig, samplemethod = "random")
 
 #PERFORM THE MC ANALYSIS
 # create empty matrix with n columns and length of sp object rows
-mcAnalysis <- matrix(NA, ncol=n, nrow=length(geul.krig$var1.pred))
+mcAnalysisRandom <- matrix(NA, ncol=n, nrow=length(geul.krig$var1.pred))
 
 # Do the analysis
 for (j in 1:n) {
-  mcAnalysis[,j] <- mySamplesLog[j] * myNS[,j]
+  mcAnalysisRandom[,j] <- mySamplesLog[j] * myNS[,j]
 }
 
 # Retrieve the mean from the analysis
-solution <- apply(mcAnalysis, 1, mean)
+solutionRandom <- apply(mcAnalysisRandom, 1, mean)
 
 # Put the mean into the spatial object
-geul.krig$meanSRS <- as.numeric(solution)
+geul.krig$meanSRSrandom <- as.numeric(solutionRandom)
 
 # Plot the object
-spplot(geul.krig, zcol="meanSRS")
+spplot(geul.krig, zcol="meanSRSrandom")
 
 
 # STRATIFIED SAMPLING
 # Draw samples from each input, choose n and sample method
-source("R/defSamples.R")
 n <- 5
 mySamplesLogStrat <- defSamples(n = n, object = myLog, samplemethod = "strat", p = 0:5/5)
 
@@ -73,19 +72,23 @@ myNSStrat <- defSamples(n = n, object = geul.krig, samplemethod = "strat", p = 0
 
 
 #PERFORM THE MC ANALYSIS
-# create empty matrix with n columns and length of sp object rows
-mcAnalysis <- matrix(NA, ncol=n, nrow=length(geul.krig$var1.pred))
+# Create empty matrix with n columns and length of sp object rows
+mcAnalysisStrat <- matrix(NA, ncol=n, nrow=length(geul.krig$var1.pred))
 
 # Do the analysis
 for (j in 1:n) {
-  mcAnalysis[,j] <- mySamplesLog[j] * myNS[,j]
+  mcAnalysisStrat[,j] <- mySamplesLogStrat[j] * myNSStrat[,j]
 }
 
 # Retrieve the mean from the analysis
-solution <- apply(mcAnalysis, 1, mean)
+solutionStrat <- apply(mcAnalysisStrat, 1, mean)
 
 # Put the mean into the spatial object
-geul.krig$meanSRS <- as.numeric(solution)
+geul.krig$meanSRSStrat <- as.numeric(solutionStrat)
 
 # Plot the object
-spplot(geul.krig, zcol="meanSRS")
+spplot(geul.krig, zcol="meanSRSStrat")
+
+
+# Plot both
+spplot(geul.krig, zcol=c(3,4))
