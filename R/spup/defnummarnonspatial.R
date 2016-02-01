@@ -16,8 +16,8 @@ defnummarnonspatial <- function(uncertain, dist, par) {
   return(um)
 }
 
-# Example
-mynorm <- defnummarnonspatial(uncertain = TRUE, dist = "norm", par = c(70,3))
+# Examples
+# mynorm <- defnummarnonspatial(uncertain = TRUE, dist = "norm", par = c(70,3))
 
 #logparams <- transformLog(0.120,0.250)
 #mylog <- defnummarnonspatial(uncertain = TRUE, dist = "log", par = c(logparams[2], logparams[1]))
