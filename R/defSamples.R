@@ -1,5 +1,6 @@
 source("R/randomsamp.R")
 source("R/stratsamp.R")
+source("R/sampleReshuffle.R")
 
 library(foreach)
 
