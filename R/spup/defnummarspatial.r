@@ -1,4 +1,4 @@
-defnummarspatial <- function(uncertain, SpatialObject, mask, semivar, beta = NA) {
+defnummarspatial <- function(uncertain, SpatialObject, mask, semivar = NA, beta = NA) {
   # check if required packages are loaded
   require(gstat)
   require(sp)
@@ -26,15 +26,18 @@ defnummarspatial <- function(uncertain, SpatialObject, mask, semivar, beta = NA)
 
   # x and y are needed to realize the class. But: is this elegant in R?
   x <- class(SpatialObject)[1]
-  y <- class(semivar)[1]
-
+  
+  # setClassUnion("semivar", c(class(semivar)[1], class(semivar)[2]))
+  semivar <- unclass(semivar)
+  semivar <- as.data.frame(semivar)
+  print(class(semivar))
+  # setClass("wowie", representation(model = "variogramModel"), contains = "data.frame")
   # set class
   setClass("nummarspatial",
            slots = list(uncertain = "logical",
                         SpatialObject = x,
                         mask = "SpatialGridDataFrame",
-                        semivar = y))
-
+                        semivar = "data.frame"))
   # create new object of class nummarspatial
   um <- new("nummarspatial", uncertain = uncertain, SpatialObject = SpatialObject, mask = mask, semivar = semivar)
 
@@ -44,6 +47,13 @@ defnummarspatial <- function(uncertain, SpatialObject, mask, semivar, beta = NA)
 # Example
 a <- defnummarspatial(uncertain = TRUE, SpatialObject = geul, mask = mask, semivar = vgmpb)
 # a
-class(geul)
-
-# class(vgmpb)[1]
+# # # class(geul)
+#  class(vgmpb3)
+# vgmpb3 <- unclass(vgmpb)
+# y <- class(vgmpb)[1]
+# z <- class(vgmpb)[2]
+# c(y,z)
+# class(vgmpb)
+# # class(vgmpb)[1]
+# setClassUnion("semivar", c("vector", "data.frame"))
+# setClassUnion("semivar", class(vgmpb))

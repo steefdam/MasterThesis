@@ -65,7 +65,7 @@ spplot(geul.krig, zcol="meanSRS")
 
 # STRATIFIED SAMPLING
 # Draw samples from each input, choose n and sample method
-n <- 200
+n <- 500
 mySamplesLogStrat <- defSamples(n = n, object = myLog, samplemethod = "strat", p = 0:5/5)
 
 myNSStrat <- defSamples(n = n, object = geul.krig, samplemethod = "strat", p = 0:5/5)
@@ -73,22 +73,6 @@ myNSStrat <- defSamples(n = n, object = geul.krig, samplemethod = "strat", p = 0
 
 #PERFORM THE MC ANALYSIS
 # Create empty matrix with n columns and length of sp object rows
-# spb <- matrix(NA, ncol=n*n, nrow=length(geul.krig$var1.pred))
-# i <- 1
-# j <- 1
-# k <- 1
-# while (i <= n) {
-#   while (j <= n) {
-#     spb[, k] <- mySamplesLogStrat[i] * myNSStrat[, j]
-#     j <- j + 1
-#     k <- k + 1
-#   }
-#   j <- 1
-#   i <- i + 1
-# }
-# 
-# solutionStrat <- apply(spb, 1, mean)
-
 mcAnalysisStrat <- matrix(NA, ncol=n, nrow=length(geul.krig$var1.pred))
  
 # Do the analysis

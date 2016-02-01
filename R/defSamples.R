@@ -43,7 +43,7 @@ defSamples <- function(n, object, samplemethod = "random", p = 0) {
     
     if (class(object) == "nummarnonspatial") {
       samples <- stratsamp(object, n/(length(p)-1), p)
-      #samples <- sampleReshuffle(samples)
+      samples <- sampleReshuffle(samples)
     }
   }
   return(samples)
