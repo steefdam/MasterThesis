@@ -1,4 +1,4 @@
-defnummarspatial <- function(uncertain, SpatialObject, mask, semivar = NULL, beta = NA) {
+defnummarspatial <- function(uncertain = FALSE, SpatialObject = NULL, mask = NULL, semivar = NULL, beta = NA) {
   # check if required packages are loaded
   require(gstat)
   require(sp)
@@ -25,21 +25,22 @@ defnummarspatial <- function(uncertain, SpatialObject, mask, semivar = NULL, bet
     if (class(semivar)[1] != "variogramModel")
       stop("semivar has to be a valid variogram model")
   }
-
-
-  setClass("nummarspatial",
-           slots = list(uncertain = "logical",
-                        SpatialObject = class(SpatialObject)[1],
-                        mask = "SpatialGridDataFrame",
-                        semivar = %#*&76%^$$%#@%^$&^%))
-
-  um <- new("nummarspatial", uncertain = uncertain, SpatialObject = SpatialObject, mask = mask, semivar = semivar)
   
+  um <- list(uncertain = uncertain,
+             SpatialObject = SpatialObject,
+             mask = mask,
+             semivar = semivar,
+             beta = beta)
+    
+  ## Set the name for the class
+  class(um) <- "nummarspatial"
   return(um)
 }
 
 # Example
 a <- defnummarspatial(uncertain = TRUE, SpatialObject = geul, mask = mask, semivar = vgmpb)
+
+class(a)
 
 
 
