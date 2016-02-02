@@ -29,18 +29,16 @@ defnummarspatial <- function(uncertain, SpatialObject, mask, semivar = NULL, bet
    #setClassUnion("semivar", c(class(semivar)[1], class(semivar)[2]))
   # semivar <- unclass(semivar)
 #   print(class(semivar))
-   # semivar <- as.data.frame(semivar)
+    class(semivar) <- "bubba"
 #   print(class(semivar))
   # setClass("test", representation(model = "variogramModel"), contains = "data.frame")
   # set class
    
-   
-   a = class(semivar)
   setClass("nummarspatial",
            slots = list(uncertain = "logical",
                         SpatialObject = class(SpatialObject)[1],
                         mask = "SpatialGridDataFrame",
-                        semivar = a))
+                        semivar = "bubba"))
 #     setClass("nummarspatial", slots = c(semivar = "variogramModel"),
 #              contains = "data.frame")
   # create new object of class nummarspatial

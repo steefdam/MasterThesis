@@ -66,7 +66,7 @@ spplot(geul.krig, zcol="meanSRS")
 # STRATIFIED SAMPLING
 # Draw samples from each input, choose n and sample method
 n <- 500
-mySamplesLogStrat <- defSamples(n = n, object = myLog, samplemethod = "strat", p = 0:5/5)
+mySamplesLogStrat <- defSamples(n = n, object = myLog, samplemethod = "strat", p = 0:10/10)
 
 myNSStrat <- defSamples(n = n, object = geul.krig, samplemethod = "strat", p = 0:5/5)
 
