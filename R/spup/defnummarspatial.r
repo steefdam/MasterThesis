@@ -1,4 +1,4 @@
-defnummarspatial <- function(uncertain, SpatialObject, mask, semivar = NA, beta = NA) {
+defnummarspatial <- function(uncertain, SpatialObject, mask, semivar = NULL, beta = NA) {
   # check if required packages are loaded
   require(gstat)
   require(sp)
@@ -21,23 +21,25 @@ defnummarspatial <- function(uncertain, SpatialObject, mask, semivar = NA, beta 
     stop("Data item in SpatialObject and mask have different coordinate reference systems")
 
   # check if semivar is a real variogramModel
-  if (class(semivar)[1] != "variogramModel")
-    stop("semivar has to be a valid variogram model")
-
-  # x and y are needed to realize the class. But: is this elegant in R?
-  x <- class(SpatialObject)[1]
+  if (!is.null(semivar)) {
+    if (class(semivar)[1] != "variogramModel")
+      stop("semivar has to be a valid variogram model")
+  }
   
   # setClassUnion("semivar", c(class(semivar)[1], class(semivar)[2]))
-  semivar <- unclass(semivar)
-  semivar <- as.data.frame(semivar)
-  print(class(semivar))
-  # setClass("wowie", representation(model = "variogramModel"), contains = "data.frame")
+  # semivar <- unclass(semivar)
+#   print(class(semivar))
+#   semivar <- as.data.frame(semivar)
+#   print(class(semivar))
+  # setClass("test", representation(model = "variogramModel"), contains = "data.frame")
   # set class
-  setClass("nummarspatial",
-           slots = list(uncertain = "logical",
-                        SpatialObject = x,
-                        mask = "SpatialGridDataFrame",
-                        semivar = "data.frame"))
+#   setClass("nummarspatial",
+#            slots = list(uncertain = "logical",
+#                         SpatialObject = class(SpatialObject)[1],
+#                         mask = "SpatialGridDataFrame",
+#                         semivar = class(semivar)))
+    setClass("nummarspatial", slots = c(semivar = "variogramModel"),
+             contains = "data.frame")
   # create new object of class nummarspatial
   um <- new("nummarspatial", uncertain = uncertain, SpatialObject = SpatialObject, mask = mask, semivar = semivar)
 
@@ -46,14 +48,17 @@ defnummarspatial <- function(uncertain, SpatialObject, mask, semivar = NA, beta 
 
 # Example
 a <- defnummarspatial(uncertain = TRUE, SpatialObject = geul, mask = mask, semivar = vgmpb)
-# a
-# # # class(geul)
-#  class(vgmpb3)
+b <- defnummarspatial(uncertain = TRUE, SpatialObject = geul, mask = mask)
+
+
+# class(vgmpb)
 # vgmpb3 <- unclass(vgmpb)
 # y <- class(vgmpb)[1]
 # z <- class(vgmpb)[2]
-# c(y,z)
+# gee <- 1
+# gee2 <- unclass(gee)
+# class(gee2) <- y
 # class(vgmpb)
-# # class(vgmpb)[1]
+# class(vgmpb)[1]
 # setClassUnion("semivar", c("vector", "data.frame"))
 # setClassUnion("semivar", class(vgmpb))
